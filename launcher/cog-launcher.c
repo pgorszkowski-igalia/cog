@@ -151,29 +151,29 @@ on_action_quit(G_GNUC_UNUSED GAction *action, G_GNUC_UNUSED GVariant *param, Cog
 }
 
 static void
-on_action_prev(G_GNUC_UNUSED GAction *action, G_GNUC_UNUSED GVariant *param, CogLauncher *launcher)
-{
-    webkit_web_view_go_back(cog_launcher_get_visible_view(launcher));
-}
-
-static void
-on_action_next(G_GNUC_UNUSED GAction *action, G_GNUC_UNUSED GVariant *param, CogLauncher *launcher)
-{
-    webkit_web_view_go_forward(cog_launcher_get_visible_view(launcher));
-}
-
-static void
-on_action_reload(G_GNUC_UNUSED GAction *action, G_GNUC_UNUSED GVariant *param, CogLauncher *launcher)
-{
-    webkit_web_view_reload(cog_launcher_get_visible_view(launcher));
-}
-
-static void
 on_action_open(G_GNUC_UNUSED GAction *action, GVariant *param, CogLauncher *launcher)
 {
     g_return_if_fail(g_variant_is_of_type(param, G_VARIANT_TYPE_STRING));
     webkit_web_view_load_uri(cog_launcher_get_visible_view(launcher), g_variant_get_string(param, NULL));
 }
+
+#define DEFINE_SIMPLE_ACTION_HANDLER(name, wk_name) \
+    static void on_action_##name(G_GNUC_UNUSED GAction *action, G_GNUC_UNUSED GVariant *param, CogLauncher *launcher) \
+    { \
+        webkit_web_view_##wk_name(cog_launcher_get_visible_view(launcher)); \
+    }
+
+DEFINE_SIMPLE_ACTION_HANDLER(prev, go_back)
+DEFINE_SIMPLE_ACTION_HANDLER(next, go_forward)
+DEFINE_SIMPLE_ACTION_HANDLER(reload, reload)
+DEFINE_SIMPLE_ACTION_HANDLER(onstart, onstart)
+DEFINE_SIMPLE_ACTION_HANDLER(onpause, onpause)
+DEFINE_SIMPLE_ACTION_HANDLER(onactivate, onactivate)
+DEFINE_SIMPLE_ACTION_HANDLER(onsuspend, onsuspend)
+DEFINE_SIMPLE_ACTION_HANDLER(onresume, onresume)
+DEFINE_SIMPLE_ACTION_HANDLER(onhibernate, onhibernate)
+DEFINE_SIMPLE_ACTION_HANDLER(onrestore, onrestore)
+DEFINE_SIMPLE_ACTION_HANDLER(ondestroy, ondestroy)
 
 static gboolean
 on_signal_quit(CogLauncher *launcher)
@@ -1243,6 +1243,14 @@ cog_launcher_constructed(GObject *object)
     cog_launcher_add_action(launcher, "previous", on_action_prev, NULL);
     cog_launcher_add_action(launcher, "next", on_action_next, NULL);
     cog_launcher_add_action(launcher, "reload", on_action_reload, NULL);
+    cog_launcher_add_action(launcher, "onstart", on_action_onstart, NULL);
+    cog_launcher_add_action(launcher, "onpause", on_action_onpause, NULL);
+    cog_launcher_add_action(launcher, "onactivate", on_action_onactivate, NULL);
+    cog_launcher_add_action(launcher, "onsuspend", on_action_onsuspend, NULL);
+    cog_launcher_add_action(launcher, "onresume", on_action_onresume, NULL);
+    cog_launcher_add_action(launcher, "onhibernate", on_action_onhibernate, NULL);
+    cog_launcher_add_action(launcher, "onrestore", on_action_onrestore, NULL);
+    cog_launcher_add_action(launcher, "ondestroy", on_action_ondestroy, NULL);
     cog_launcher_add_action(launcher, "open", on_action_open, G_VARIANT_TYPE_STRING);
 
     g_application_add_main_option_entries(G_APPLICATION(object), s_cli_options);

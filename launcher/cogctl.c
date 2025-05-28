@@ -305,6 +305,51 @@ cmd_find_by_name (const char *name)
             .handler = cmd_generic_no_args,
         },
         {
+            .name = "onstart",
+            .desc = "Call onStart Lifecycle API",
+            .handler = cmd_generic_no_args,
+        },
+        {
+            .name = "onstart",
+            .desc = "Call onStart Lifecycle API",
+            .handler = cmd_generic_no_args,
+        },
+        {
+            .name = "onpause",
+            .desc = "Call onPause Lifecycle API",
+            .handler = cmd_generic_no_args,
+        },
+        {
+            .name = "onactivate",
+            .desc = "Call onActivate Lifecycle API",
+            .handler = cmd_generic_no_args,
+        },
+        {
+            .name = "onsuspend",
+            .desc = "Call onSuspend Lifecycle API",
+            .handler = cmd_generic_no_args,
+        },
+        {
+            .name = "onresume",
+            .desc = "Call onResume Lifecycle API",
+            .handler = cmd_generic_no_args,
+        },
+        {
+            .name = "onhibernate",
+            .desc = "Call onHibernate Lifecycle API",
+            .handler = cmd_generic_no_args,
+        },
+        {
+            .name = "onrestore",
+            .desc = "Call onRestore Lifecycle API",
+            .handler = cmd_generic_no_args,
+        },
+        {
+            .name = "ondestroy",
+            .desc = "Call onDestroy Lifecycle API",
+            .handler = cmd_generic_no_args,
+        },
+        {
             .name = NULL,
         },
     };
