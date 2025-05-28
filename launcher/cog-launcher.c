@@ -129,29 +129,25 @@ on_action_quit(G_GNUC_UNUSED GAction *action, G_GNUC_UNUSED GVariant *param, Cog
 }
 
 static void
-on_action_prev(G_GNUC_UNUSED GAction *action, G_GNUC_UNUSED GVariant *param, CogLauncher *launcher)
-{
-    webkit_web_view_go_back(cog_shell_get_web_view(launcher->shell));
-}
-
-static void
-on_action_next(G_GNUC_UNUSED GAction *action, G_GNUC_UNUSED GVariant *param, CogLauncher *launcher)
-{
-    webkit_web_view_go_forward(cog_shell_get_web_view(launcher->shell));
-}
-
-static void
-on_action_reload(G_GNUC_UNUSED GAction *action, G_GNUC_UNUSED GVariant *param, CogLauncher *launcher)
-{
-    webkit_web_view_reload(cog_shell_get_web_view(launcher->shell));
-}
-
-static void
 on_action_open(G_GNUC_UNUSED GAction *action, GVariant *param, CogLauncher *launcher)
 {
     g_return_if_fail(g_variant_is_of_type(param, G_VARIANT_TYPE_STRING));
     webkit_web_view_load_uri(cog_shell_get_web_view(launcher->shell), g_variant_get_string(param, NULL));
 }
+
+#define DEFINE_SIMPLE_ACTION_HANDLER(name, wk_name) \
+    static void on_action_##name(G_GNUC_UNUSED GAction *action, G_GNUC_UNUSED GVariant *param, CogLauncher *launcher) \
+    { \
+        webkit_web_view_##wk_name(cog_shell_get_web_view(launcher->shell)); \
+    }
+
+DEFINE_SIMPLE_ACTION_HANDLER(prev, go_back)
+DEFINE_SIMPLE_ACTION_HANDLER(next, go_forward)
+DEFINE_SIMPLE_ACTION_HANDLER(reload, reload)
+DEFINE_SIMPLE_ACTION_HANDLER(hide, hide)
+DEFINE_SIMPLE_ACTION_HANDLER(show, show)
+DEFINE_SIMPLE_ACTION_HANDLER(freeze, freeze)
+DEFINE_SIMPLE_ACTION_HANDLER(resume, resume)
 
 static gboolean
 on_signal_quit(CogLauncher *launcher)
@@ -1054,6 +1050,10 @@ cog_launcher_constructed(GObject *object)
     cog_launcher_add_action(launcher, "previous", on_action_prev, NULL);
     cog_launcher_add_action(launcher, "next", on_action_next, NULL);
     cog_launcher_add_action(launcher, "reload", on_action_reload, NULL);
+    cog_launcher_add_action(launcher, "hide", on_action_hide, NULL);
+    cog_launcher_add_action(launcher, "show", on_action_show, NULL);
+    cog_launcher_add_action(launcher, "freeze", on_action_freeze, NULL);
+    cog_launcher_add_action(launcher, "resume", on_action_resume, NULL);
     cog_launcher_add_action(launcher, "open", on_action_open, G_VARIANT_TYPE_STRING);
 
     g_application_add_main_option_entries(G_APPLICATION(object), s_cli_options);

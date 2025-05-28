@@ -305,6 +305,26 @@ cmd_find_by_name (const char *name)
             .handler = cmd_generic_no_args,
         },
         {
+            .name = "freeze",
+            .desc = "Call freeze Lifecycle API",
+            .handler = cmd_generic_no_args,
+        },
+        {
+            .name = "resume",
+            .desc = "Call resume Lifecycle API",
+            .handler = cmd_generic_no_args,
+        },
+        {
+            .name = "hide",
+            .desc = "Call hide Lifecycle API",
+            .handler = cmd_generic_no_args,
+        },
+        {
+            .name = "show",
+            .desc = "Call show Lifecycle API",
+            .handler = cmd_generic_no_args,
+        },
+        {
             .name = NULL,
         },
     };
